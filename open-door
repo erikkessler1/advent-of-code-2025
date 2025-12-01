@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require "fileutils"
+
+# Open another "door" of the advent calendar. Currently, just
+# templates class and spec files.
+#
+# Usage:
+#   ./open-door "Day 3: Gear Ratios"
+
+puzzle_title = ARGV.shift
+day, puzzle_name = /Day (\d+): (.*)/.match(puzzle_title).values_at(1, 2)
+
+sample = ""
+puts "Paste sample then type 'END':"
+while (sample_line = gets.chomp) != "END"
+  sample += "        #{sample_line}\n"
+end
+
+day_string = format("%02d", day)
+puzzle_name_underscore = puzzle_name.downcase.gsub(" ", "_")
+puzzle_name_class = puzzle_name.gsub(" ", "")
+
+puzzle_path = "./day-#{day_string}/#{puzzle_name_underscore}.rb"
+puzzle_class = <<~RUBY
+  # frozen_string_literal: true
+
+  class #{puzzle_name_class}
+    include NewlineInput
+
+    def foo
+      0
+    end
+  end
+RUBY
+
+spec_path = "./spec/day_#{day_string}_spec.rb"
+spec = <<~RUBY
+  # frozen_string_literal: true
+
+  require_relative "../day-#{day_string}/#{puzzle_name_underscore}"
+
+  describe #{puzzle_name_class}, day: #{day} do
+    subject(:#{puzzle_name_underscore}) { described_class.new(input) }
+
+    context "with sample input", :sample do
+      let(:input) do
+        <<~INPUT
+          #{sample.strip}
+        INPUT
+      end
+
+      it "TODO", part: 1 do
+        expect(#{puzzle_name_underscore}.foo).to eq(0)
+      end
+
+      it "TODO", part: 2 do
+        expect(#{puzzle_name_underscore}.foo).to eq(0)
+      end
+    end
+
+    it "TODO", part: 1 do
+      expect(#{puzzle_name_underscore}.foo).to eq(0)
+    end
+
+    it "TODO", part: 2 do
+      expect(#{puzzle_name_underscore}.foo).to eq(0)
+    end
+  end
+RUBY
+
+print "⛄ Making ./day-#{day_string}..."
+FileUtils.mkdir_p("./day-#{day_string}")
+puts " DONE."
+
+print "🦌 Writing #{puzzle_path}..."
+File.write(puzzle_path, puzzle_class)
+puts " DONE."
+
+print "🎄 Writing #{spec_path}..."
+File.write(spec_path, spec)
+puts " DONE."
