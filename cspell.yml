@@ -4,3 +4,4 @@ ignorePaths:
 words:
   - gsub
   - srand
+  - joltages
