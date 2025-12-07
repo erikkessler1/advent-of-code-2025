@@ -1,0 +1,46 @@
+# frozen_string_literal: true
+
+require_relative "../day-07/laboratories"
+
+describe Laboratories, day: 7 do
+  subject(:laboratories) { described_class.new(input) }
+
+  context "with sample input", :sample do
+    let(:input) do
+      <<~INPUT
+        .......S.......
+        ...............
+        .......^.......
+        ...............
+        ......^.^......
+        ...............
+        .....^.^.^.....
+        ...............
+        ....^.^...^....
+        ...............
+        ...^.^...^.^...
+        ...............
+        ..^...^.....^..
+        ...............
+        .^.^.^.^.^...^.
+        ...............
+      INPUT
+    end
+
+    it "splits beams", part: 1 do
+      expect(laboratories.beam_splits).to eq(21)
+    end
+
+    it "splits quantum beams", part: 2 do
+      expect(laboratories.timelines).to eq(40)
+    end
+  end
+
+  it "splits beams", part: 1 do
+    expect(laboratories.beam_splits).to eq(1658)
+  end
+
+  it "splits quantum beams", part: 2 do
+    expect(laboratories.timelines).to eq(53_916_299_384_254)
+  end
+end
